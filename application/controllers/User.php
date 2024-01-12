@@ -25,6 +25,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
       $this->form_validation->set_rules("Name","Name","required");
       $this->form_validation->set_rules("Email","Email","required|valid_email");
+      $this->form_validation->set_rules("Designation","Designation","required");
 
       if($this->form_validation->run() == false)
       {
@@ -34,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       {
         //Save record to database
         $formArray = array();
-        $formArray['Name'] = $this->input->post('name');
+        $formArray['Name'] = $this->input->post('Name');
         $formArray['Email'] = $this->input->post('Email');
         $formArray['Designation'] = $this->input->post('Designation');
         $this->emodel->create($formArray);
@@ -43,6 +44,30 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 
       }
+    }
+
+    function update($userId){
+      $this->load->model('Employee_model');
+      $user = $this->emodel->getUser($userId);
+      $data = array();
+      $data['User']= $user;
+
+      $this->form_validation->set_rules("Name","Name","required");
+      $this->form_validation->set_rules("Email","Email","required|valid_email");
+      $this->form_validation->set_rules("Designation","Designation","required");
+
+      if ($this->form_validation->run() == false){
+        $this->load->view('update', $data);
+      } else{
+        $formArray = array();
+        $formArray['Name'] = $this->input->post('Name');
+        $formArray['Email'] = $this->input->post('Email');
+        $formArray['Designation'] = $this->input->post('Designation');
+        this->session->set_flashdata('success', 'Record updated Successfully!');
+        redirect(base_url().'index.php/user/index');
+      }
+
+      
     }
 
 }  
